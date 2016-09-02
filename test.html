@@ -65,7 +65,7 @@
 		  var textureLoader = new THREE.TextureLoader();
 
 		  //cube map
-		  var path = "three.js-master/examples/textures/cube/skybox/";
+		  var path = "three.js/examples/textures/cube/skybox/";
 		  var format = '.jpg';
 		  var urls = [
 		    path + 'px' + format, path + 'nx' + format,
@@ -86,7 +86,7 @@
 			scene = new THREE.Scene();
 			scene.background = reflectionCube;
 
-			//Materials list
+			//Materials list is pretty cool
 			var textureLoader = new THREE.TextureLoader();
 			var material = new THREE.MeshPhongMaterial({
 				color: 0x21a3bb,
