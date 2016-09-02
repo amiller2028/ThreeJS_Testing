@@ -16,13 +16,13 @@
 </head>
 
 <body id="body">
-	<script src="../three.js-master/build/three.js"></script>
-	<script src="../three.js-master/examples/js/controls/OrbitControls.js"></script>
-	<script src="../three.js-master/examples/js/Detector.js"></script>
-	<script src="../three.js-master/examples/js/libs/stats.min.js"></script>
-	<script src="../three.js-master/examples/js/loaders/ctm/lzma.js"></script>
-	<script src="../three.js-master/examples/js/loaders/ctm/ctm.js"></script>
-	<script src="../three.js-master/examples/js/loaders/ctm/CTMLoader.js"></script>
+	<script src="three.js/build/three.js"></script>
+	<script src="three.js/examples/js/controls/OrbitControls.js"></script>
+	<script src="three.js/examples/js/Detector.js"></script>
+	<script src="three.js/examples/js/libs/stats.min.js"></script>
+	<script src="three.js/examples/js/loaders/ctm/lzma.js"></script>
+	<script src="three.js/examples/js/loaders/ctm/ctm.js"></script>
+	<script src="three.js/examples/js/loaders/ctm/CTMLoader.js"></script>
 	<script>
 		var stats,loader;
 		var meshes = [];
@@ -65,7 +65,7 @@
 		  var textureLoader = new THREE.TextureLoader();
 
 		  //cube map
-		  var path = "../three.js-master/examples/textures/cube/skybox/";
+		  var path = "three.js-master/examples/textures/cube/skybox/";
 		  var format = '.jpg';
 		  var urls = [
 		    path + 'px' + format, path + 'nx' + format,
@@ -90,6 +90,11 @@
 			var textureLoader = new THREE.TextureLoader();
 			var material = new THREE.MeshPhongMaterial({
 				color: 0x21a3bb,
+				normalScale: new THREE.Vector2(0.8, 0.8),
+				envMap: reflectionCube
+			});
+			var material = new THREE.MeshPhongMaterial({
+				color: 0x26cbdbbb,
 				normalScale: new THREE.Vector2(0.8, 0.8),
 				envMap: reflectionCube
 			});
@@ -140,7 +145,7 @@
 			/* var meshes; */
 			loader.load("heli/heli-MG2.ctm", function(geometry) {
 
-				var mesh = new THREE.Mesh(geometry, Alum_L);
+				var mesh = new THREE.Mesh(geometry, material2);
 				mesh
 				scene.add(mesh);
 				meshes['heli'] = mesh;
