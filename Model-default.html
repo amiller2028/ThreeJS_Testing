@@ -17,6 +17,12 @@
 
 <body id="body">
 	<script src="three.js/build/three.js"></script>
+	<script src="three.js/examples/js/controls/OrbitControls.js"></script>
+	<script src="three.js/examples/js/Detector.js"></script>
+	<script src="three.js/examples/js/libs/stats.min.js"></script>
+	<script src="three.js/examples/js/loaders/ctm/lzma.js"></script>
+	<script src="three.js/examples/js/loaders/ctm/ctm.js"></script>
+	<script src="three.js/examples/js/loaders/ctm/CTMLoader.js"></script>
 	<script>
 		var stats,loader;
 		var meshes = [];
@@ -82,60 +88,22 @@
 
 			//Materials list is pretty cool
 			var textureLoader = new THREE.TextureLoader();
-			var material = new THREE.MeshPhongMaterial({
-				color: 0x21a3bb,
-				normalScale: new THREE.Vector2(0.8, 0.8),
-				envMap: reflectionCube
-			});
-			var material1 = new THREE.MeshLambertMaterial({
-				color: 0xff6600,
-				envMap: reflectionCube,
-				combine: THREE.MixOperation,
-				reflectivity: 0.6
-			});
-			var material2 = new THREE.MeshLambertMaterial({
-				color: 0xffee00,
-				envMap: refractionCube,
-				refractionRatio: 0.95
-			});
-			var material3 = new THREE.MeshLambertMaterial({
-				color: 0xffffff,
-				map: textureLoader.load("heli/Textures/sh3.jpg"),
-				envMap: reflectionCube,
-				specularMap: textureLoader.load("heli/Textures/sh3_s.jpg")
-			});
-			var mat_heli = new THREE.MeshStandardMaterial({
-				map: textureLoader.load("heli/Textures/sh3.jpg"),
-				lightMap: textureLoader.load("heli/Textures/sh3_s.jpg"),
-				envMap: reflectionCube
+
+			var mat_UV = new THREE.MeshStandardMaterial({
+
+				aoMap: textureLoader.load("Quixel/TorFrickPetrolProject/Petrol_AO.png"),
+				aoMapIntensity: 0.01,
+				normalMap: textureLoader.load("Quixel/TorFrickPetrolProject/Petrol_Normal.png")
 			});
 
-			//Aluminum Large texture
-		  var Alum_L = new THREE.MeshStandardMaterial( {
-		    map: null,
-		    color: 0xffffff,
-		    metalness: 1.0,
-		    shading: THREE.SmoothShading,
-		    envMap: reflectionCube
 
-		  } );
-		  textureLoader.load( "Material Library/aluminum_bump.jpg", function( map ) {
-		    map.wrapS = THREE.RepeatWrapping;
-		    map.wrapT = THREE.RepeatWrapping;
-		    map.anisotropy = 4;
-		    map.repeat.set( 9, 2 );
-		    Alum_L.roughnessMap = map;
-		    //Alum_L.bumpMap = map;
-		    //Alum_L.needsUpdate = true;
-		  } );
 			//Geometry list
 
 			loader = new THREE.CTMLoader();
 			/* var meshes; */
-			loader.load("heli/heli-MG2.ctm", function(geometry) {
+			loader.load("Quixel/TorFrickPetrolProject/Petrol-MG2.ctm", function(geometry) {
 
-				var mesh = new THREE.Mesh(geometry, material2);
-				mesh
+				var mesh = new THREE.Mesh(geometry, mat_UV);
 				scene.add(mesh);
 				meshes['heli'] = mesh;
 
@@ -148,7 +116,7 @@
 			scene.add(ambient);
 
 			pointLight = new THREE.PointLight(0xffffff, 2);
-			pointLight.position.set(1, 2, 5);
+			pointLight.position.set(200, 220, 500);
 			scene.add(pointLight);
 
 			//
