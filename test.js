@@ -1,6 +1,6 @@
 var stats, loader;
 var meshes = [];
-var camera, controls, scene, renderer, object;
+var camera, cubeCamera, controls, scene, renderer, object, sphere, groundMirror;
 
 init();
 animate();
@@ -85,10 +85,18 @@ function init() {
     pointLight.position.set(100, 100, 100);
     scene.add(pointLight);
 
-    //Materials list
+
+
+    //Create cube camera for generating materials with dynamic cube maps
+    //     NOTE: All materials with dynamic cube mapping will need to be
+    //     updated in the renderer and request animation frames
+    cubeCamera = new THREE.CubeCamera(1, 100, 512);//( near, far, cubeResolution )
+    scene.add(cubeCamera);
+
+    // create a texture loader(image loader)
     var textureLoader = new THREE.TextureLoader();
 
-    //Aluminum Large texture
+    //Materials list
     var black = new THREE.MeshStandardMaterial({
         color: 0x000000,
         roughness: 0.5,
@@ -98,24 +106,24 @@ function init() {
         envMap: reflectionCube,
         envMapIntensity: 1
     });
-    var glass = new THREE.MeshLambertMaterial( {
+    var glass = new THREE.MeshLambertMaterial({
         color: 0xffffff,
         envMap: reflectionCube,
         opacity: 0.3,
         transparent: true
-    } );
-    var rglass = new THREE.MeshLambertMaterial( {
+    });
+    var rglass = new THREE.MeshLambertMaterial({
         color: 0xa71b1b,
         envMap: reflectionCube,
         opacity: 0.6,
         transparent: true
-    } );
-    var yglass = new THREE.MeshLambertMaterial( {
+    });
+    var yglass = new THREE.MeshLambertMaterial({
         color: 0xe3bf23,
         envMap: reflectionCube,
         opacity: 0.6,
         transparent: true
-    } );
+    });
     var red = new THREE.MeshStandardMaterial({
         color: 0x6e1111,
         roughness: 0,
@@ -146,7 +154,7 @@ function init() {
     var lights = new THREE.MeshStandardMaterial({
         color: 0xb31515,
         emissive: 0xb31515,
-        emissiventensity: 1,
+        emissiveIntensity: 1,
         roughness: 0.02,
         metalness: 0.3,
         opacity: 1,
@@ -169,13 +177,29 @@ function init() {
         shading: THREE.SmoothShading,
         envMap: reflectionCube
     });
-
+    var shiny_floor = new THREE.MeshLambertMaterial({
+        color: 0xffffff,
+        envMap: cubeCamera.renderTarget,
+        reflectivity: 0.2,
+        shading: THREE.SmoothShading
+    });
 
     //Geometry list
     loader = new THREE.CTMLoader();
 
+    var planeGeo = new THREE.PlaneBufferGeometry( 10000, 10000);
+
+  				// MIRROR planes
+  				groundMirror = new THREE.Mirror( renderer, camera, { clipBias: 0.003, textureWidth: 2048, textureHeight: 2048, color: 0x777777, opacity: 0.2} );
+
+  				var mirrorMesh = new THREE.Mesh( planeGeo, groundMirror.material );
+  				mirrorMesh.add( groundMirror );
+  				mirrorMesh.rotateX( - Math.PI / 2 );
+  				scene.add( mirrorMesh );
+
+
     // loader.load("camaro/Camaro.ctm", function(geometry) {
-    //     var mesh = new THREE.Mesh(geometry, black);
+    //     var mesh = new THREE.Mesh(geometry, shiny_floor);
     //     scene.add(mesh);
     //     meshes['camaro'] = mesh;
     // });
@@ -271,6 +295,7 @@ function animate() {
     requestAnimationFrame(animate);
 
     controls.update(); // required if controls.enableDamping = true, or if controls.autoRotate = true
+    groundMirror.render();
 
     stats.update();
 
@@ -280,6 +305,7 @@ function animate() {
 
 function render() {
 
+    groundMirror.visible = true;
     renderer.render(scene, camera);
 
 }
