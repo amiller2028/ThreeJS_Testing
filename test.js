@@ -9,22 +9,23 @@ function init() {
 
     scene = new THREE.Scene();
 
-    scene.fog = new THREE.FogExp2(0xcccccc, 0.5); //(color , intensity)
+    scene.fog = new THREE.FogExp2(0x071721, 0.7); //(color , intensity)
 
     renderer = new THREE.WebGLRenderer({
         antialias: true
     });
-    renderer.setClearColor( new THREE.Color( 0x111111 ) );
+    renderer.setClearColor(scene.fog.color);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-
 
     var container = document.getElementById('body');
     container.appendChild(renderer.domElement);
 
+    //Camera settings
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(-50, 50, 50); //(x, y, z)
 
+    //Control settings
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     //controls.addEventListener( 'change', render ); // add this only if there is no animation loop (requestAnimationFrame)
     controls.enableDamping = true;
@@ -61,7 +62,30 @@ function init() {
     scene = new THREE.Scene();
     //scene.background = reflectionCube;
 
-    //Materials list is pretty cool
+    // LIGHTS
+    // hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);//(sky color, ground color, intensity)
+    // scene.add(hemiLight);
+
+    //var ambient = new THREE.AmbientLight(0xffffff);
+    //scene.add(ambient);
+
+    pointLight = new THREE.PointLight(0x140bbe, 2);
+    pointLight.position.set(250, 250, 250);
+    scene.add(pointLight);
+
+    pointLight = new THREE.PointLight(0xda1818, 1);
+    pointLight.position.set(-250, 250, -250);
+    scene.add(pointLight);
+
+    pointLight = new THREE.PointLight(0xffffff, 0.5);
+    pointLight.position.set(-100, 250, -100);
+    scene.add(pointLight);
+
+    pointLight = new THREE.PointLight(0xffffff, 0.5);
+    pointLight.position.set(100, 100, 100);
+    scene.add(pointLight);
+
+    //Materials list
     var textureLoader = new THREE.TextureLoader();
 
     //Aluminum Large texture
@@ -93,7 +117,7 @@ function init() {
         transparent: true
     } );
     var red = new THREE.MeshStandardMaterial({
-        color: 0x740000,
+        color: 0x6e1111,
         roughness: 0,
         metalness: 0.1,
         opacity: 1,
@@ -109,6 +133,15 @@ function init() {
         shading: THREE.SmoothShading,
         envMap: reflectionCube,
         envMapIntensity: 1
+    });
+    var leather = new THREE.MeshStandardMaterial({
+        color: 0x825937,
+        roughness: 0.8,
+        metalness: 0.2,
+        opacity: 1,
+        shading: THREE.SmoothShading,
+        envMap: reflectionCube,
+        envMapIntensity: 0.2
     });
     var lights = new THREE.MeshStandardMaterial({
         color: 0xb31515,
@@ -131,33 +164,21 @@ function init() {
         envMapIntensity: 1
     });
     var Alum_L = new THREE.MeshStandardMaterial({
-        color: 0xcccccc,
+        color: 0xb6b6b6,
         metalness: 1,
         shading: THREE.SmoothShading,
-        envMap: reflectionCube,
-        envMapIntensity: 1
+        envMap: reflectionCube
     });
-    var leather = new THREE.MeshStandardMaterial({
-        color: 0x382608,
-        roughness: 0.95,
-        metalness: 0,
-        opacity: 1,
-        shading: THREE.SmoothShading,
-        envMap: reflectionCube,
-        envMapIntensity: 0.2
-    });
+
 
     //Geometry list
-    //object = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100, 4, 4 ), spotlight );//(width, heigt, widthSegments, heightSegments)
-	  //	scene.add( object );
-
     loader = new THREE.CTMLoader();
-    // var plane = new THREE.Mesh(
-		// 			new THREE.PlaneBufferGeometry( 10000, 10000 ),
-		// 			new THREE.MeshBasicMaterial( { color: 0xffffff, opacity: 0.5, transparent: true } )
-		// 		);
-		// 		plane.rotation.x = - Math.PI / 2;
-		// 		scene.add( plane );
+
+    // loader.load("camaro/Camaro.ctm", function(geometry) {
+    //     var mesh = new THREE.Mesh(geometry, black);
+    //     scene.add(mesh);
+    //     meshes['camaro'] = mesh;
+    // });
     loader.load("car/body.ctm", function(geometry) {
         var mesh = new THREE.Mesh(geometry, red);
         scene.add(mesh);
@@ -228,34 +249,6 @@ function init() {
         scene.add(mesh);
         meshes['tires'] = mesh;
     });
-
-
-
-    // LIGHTS
-
-    //                                    sky color, ground color, intensity
-    // hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2);
-    // scene.add(hemiLight);
-
-    //var ambient = new THREE.AmbientLight(0xffffff);
-    //scene.add(ambient);
-
-    pointLight = new THREE.PointLight(0x140bbe, 2);
-    pointLight.position.set(250, 250, 250);
-    scene.add(pointLight);
-
-    pointLight = new THREE.PointLight(0xda1818, 1);
-    pointLight.position.set(-250, 250, -250);
-    scene.add(pointLight);
-
-    pointLight = new THREE.PointLight(0xffffff, 0.5);
-    pointLight.position.set(-100, 250, -100);
-    scene.add(pointLight);
-
-    pointLight = new THREE.PointLight(0xffffff, 0.5);
-    pointLight.position.set(100, 100, 100);
-    scene.add(pointLight);
-    //
 
     stats = new Stats();
     container.appendChild(stats.dom);
