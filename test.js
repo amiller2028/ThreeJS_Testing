@@ -14,7 +14,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({
         antialias: true
     });
-    renderer.setClearColor(scene.fog.color);
+    renderer.setClearColor( new THREE.Color( 0x111111 ) );
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -93,7 +93,7 @@ function init() {
         transparent: true
     } );
     var red = new THREE.MeshStandardMaterial({
-        color: 0x6e1111,
+        color: 0x740000,
         roughness: 0,
         metalness: 0.1,
         opacity: 1,
@@ -109,15 +109,6 @@ function init() {
         shading: THREE.SmoothShading,
         envMap: reflectionCube,
         envMapIntensity: 1
-    });
-    var leather = new THREE.MeshStandardMaterial({
-        color: 0x825937,
-        roughness: 0.8,
-        metalness: 0.2,
-        opacity: 1,
-        shading: THREE.SmoothShading,
-        envMap: reflectionCube,
-        envMapIntensity: 0.2
     });
     var lights = new THREE.MeshStandardMaterial({
         color: 0xb31515,
@@ -140,10 +131,20 @@ function init() {
         envMapIntensity: 1
     });
     var Alum_L = new THREE.MeshStandardMaterial({
-        color: 0xb6b6b6,
+        color: 0xcccccc,
         metalness: 1,
         shading: THREE.SmoothShading,
-        envMap: reflectionCube
+        envMap: reflectionCube,
+        envMapIntensity: 1
+    });
+    var leather = new THREE.MeshStandardMaterial({
+        color: 0x382608,
+        roughness: 0.95,
+        metalness: 0,
+        opacity: 1,
+        shading: THREE.SmoothShading,
+        envMap: reflectionCube,
+        envMapIntensity: 0.2
     });
 
     //Geometry list
@@ -151,12 +152,12 @@ function init() {
 	  //	scene.add( object );
 
     loader = new THREE.CTMLoader();
-
-    // loader.load("camaro/Camaro.ctm", function(geometry) {
-    //     var mesh = new THREE.Mesh(geometry, black);
-    //     scene.add(mesh);
-    //     meshes['camaro'] = mesh;
-    // });
+    // var plane = new THREE.Mesh(
+		// 			new THREE.PlaneBufferGeometry( 10000, 10000 ),
+		// 			new THREE.MeshBasicMaterial( { color: 0xffffff, opacity: 0.5, transparent: true } )
+		// 		);
+		// 		plane.rotation.x = - Math.PI / 2;
+		// 		scene.add( plane );
     loader.load("car/body.ctm", function(geometry) {
         var mesh = new THREE.Mesh(geometry, red);
         scene.add(mesh);
@@ -233,8 +234,8 @@ function init() {
     // LIGHTS
 
     //                                    sky color, ground color, intensity
-    hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
-    scene.add(hemiLight);
+    // hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2);
+    // scene.add(hemiLight);
 
     //var ambient = new THREE.AmbientLight(0xffffff);
     //scene.add(ambient);
@@ -242,12 +243,15 @@ function init() {
     pointLight = new THREE.PointLight(0x140bbe, 2);
     pointLight.position.set(250, 250, 250);
     scene.add(pointLight);
+
     pointLight = new THREE.PointLight(0xda1818, 1);
     pointLight.position.set(-250, 250, -250);
     scene.add(pointLight);
+
     pointLight = new THREE.PointLight(0xffffff, 0.5);
     pointLight.position.set(-100, 250, -100);
     scene.add(pointLight);
+
     pointLight = new THREE.PointLight(0xffffff, 0.5);
     pointLight.position.set(100, 100, 100);
     scene.add(pointLight);
