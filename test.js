@@ -23,7 +23,7 @@ function init() {
 
     //Camera settings
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(-50, 50, 50); //(x, y, z)
+    camera.position.set(-110, 50, 90); //(x, y, z)
 
     //Control settings
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -33,7 +33,7 @@ function init() {
     controls.enableZoom = true;
     controls.rotateSpeed = 0.2;
     controls.maxPolarAngle = Math.PI / 2;
-    controls.minDistance = 15;
+    controls.minDistance = 110;
     controls.maxDistance = 200;
 
     // world
@@ -41,7 +41,7 @@ function init() {
     var textureLoader = new THREE.TextureLoader();
 
     //cube map
-    var path = "three.js/examples/textures/cube/skybox/";
+    var path = "cubemap/";
     var format = '.jpg';
     var urls = [
         path + 'px' + format, path + 'nx' + format,
@@ -125,7 +125,7 @@ function init() {
         transparent: true
     });
     var red = new THREE.MeshStandardMaterial({
-        color: 0x6e1111,
+        color: 0x5b0c13,
         roughness: 0,
         metalness: 0.1,
         opacity: 1,
