@@ -7,4 +7,4 @@ Works best with a server
 
 Preview:
 -------
-![alttext](https://github.com/amiller2028/ThreeJS_Testing/blob/master/demo.PNG)
+![alttext](https://github.com/amiller2028/ThreeJS_Testing/blob/master/images/demo.PNG "Preview")
